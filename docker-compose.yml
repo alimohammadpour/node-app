@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node
+    volumes:
+      - ./:/myapp/
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    env_file:
+      - ./mongo/.env
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
