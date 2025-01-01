@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../../models/userModel.js";
 import { createUserModel, getUserProgress } from "../../services/userService.js";
+import { UserProgressEnum } from "../../enums/UserProgressEnum.js";
 
 describe('User Service', () => {
     it('create a user', async() => {
@@ -13,12 +14,12 @@ describe('User Service', () => {
         const findOne = jest.spyOn(User, 'findOne').mockResolvedValue(undefined);
         jest.spyOn(User.prototype, 'save').mockResolvedValue({
             ...modelInstance,
-            progress: [{ level: 1, completion: 10 }],
+            progress: UserProgressEnum,
         });
 
         const { progress: { level, completion } } = await createUserModel(modelInstance);
         expect(findOne).toHaveBeenCalledTimes(1);
-        expect({ level, completion }).toEqual({ level: 1, completion: '10%' });
+        expect({ level, completion }).toEqual(UserProgressEnum);
     });
 
     it('get a user progress', async() => {

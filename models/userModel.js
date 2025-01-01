@@ -1,15 +1,16 @@
 import { Schema, model } from "mongoose";
+import { UserProgressEnum } from "../enums/UserProgressEnum.js";
 
 const userProgressSchema = new Schema({
     level: { 
         type: Number, 
         required: true, 
-        default: 1 
+        default: UserProgressEnum.level
     },
     completion: { 
         type: String, 
         required: true, 
-        default: '10%'
+        default: UserProgressEnum.completion
     },
 });
 
@@ -30,7 +31,7 @@ const userSchema = new Schema({
     progress: {
         type: userProgressSchema,
         required: true,
-        default: { level: 1, completion: '10%' },
+        default: UserProgressEnum,
     },
 }, { timestamps: true });
   
