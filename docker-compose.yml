@@ -23,5 +23,17 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  web:
+    build:
+      context: resources
+      dockerfile: Dockerfile
+    container_name: web
+    volumes:
+      - ./resources:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - node
+
 volumes:
   mongo_data:
