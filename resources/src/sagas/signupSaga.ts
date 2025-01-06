@@ -1,11 +1,30 @@
-import { takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { USER_SIGNUP_REQUEST, UserSignupRequestTypes } from "../types/SignupType";
+import { UserSignupRequestTypes } from "../types/SignupType";
+import { 
+    userSignupFailure, 
+    userSignupRequest, 
+    userSignupSuccess, 
+    UserSignupSuccessType 
+} from "../slices/signupSlice";
+import { api } from "../api";
+import { AxiosError, AxiosResponse } from "axios";
 
-export function* handleUserSignup(action: PayloadAction<UserSignupRequestTypes>): Generator {
+export const createUser = (user: UserSignupRequestTypes) => api.post<UserSignupSuccessType>(`user`, user);
 
+export function* handleUserSignup({ payload }: PayloadAction<UserSignupRequestTypes>): Generator {
+    try {
+        const { data } = (yield call(createUser, payload)) as AxiosResponse<UserSignupSuccessType>;
+        yield put(userSignupSuccess(data));
+    } catch (err: unknown) {
+        // console.log(error);
+        const axiosError = err as AxiosError;
+        const error = axiosError.response?.data as { error: string }
+        // console.log(axiosError.message, axiosError.response?.data, error);
+        yield put(userSignupFailure(error));
+    }
 }
 
 export function* signupSaga() {
-    yield takeLatest(USER_SIGNUP_REQUEST, handleUserSignup);
+    yield takeLatest(userSignupRequest.type, handleUserSignup);
 }

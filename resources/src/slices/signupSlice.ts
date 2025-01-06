@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { UserSignupRequestTypes } from "../types/SignupType";
 
-type UserSignupSuccessType = { id: string, message: string };
+export type UserSignupSuccessType = { id: string, message: string };
 
 interface SignupState {
     pending: boolean;
@@ -18,7 +19,7 @@ const signupSlice = createSlice({
     name: 'signup',
     initialState,
     reducers: {
-        userSignupRequest: (state) => {
+        userSignupRequest: (state, { payload }: PayloadAction<UserSignupRequestTypes>) => {
             state.pending = true
         },
         userSignupSuccess: (state, { payload }: PayloadAction<UserSignupSuccessType>) => {
