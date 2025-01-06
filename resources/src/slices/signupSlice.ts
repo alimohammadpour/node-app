@@ -3,13 +3,13 @@ import { UserSignupRequestTypes } from "../types/SignupType";
 
 export type UserSignupSuccessType = { id: string, message: string };
 
-interface SignupState {
+export interface SignupState {
     pending: boolean;
     user: null | UserSignupSuccessType;
     error: null | string;
 }
 
-const initialState: SignupState = {
+export const initialState: SignupState = {
     pending: false,
     user: null,
     error: null,

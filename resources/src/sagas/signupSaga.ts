@@ -17,10 +17,8 @@ export function* handleUserSignup({ payload }: PayloadAction<UserSignupRequestTy
         const { data } = (yield call(createUser, payload)) as AxiosResponse<UserSignupSuccessType>;
         yield put(userSignupSuccess(data));
     } catch (err: unknown) {
-        // console.log(error);
         const axiosError = err as AxiosError;
         const error = axiosError.response?.data as { error: string }
-        // console.log(axiosError.message, axiosError.response?.data, error);
         yield put(userSignupFailure(error));
     }
 }
