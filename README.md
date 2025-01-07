@@ -37,4 +37,5 @@ docker-compose up -d
 ### 4. Testing
 ```
 docker-compose exec node yarn test
+docker-compose exec web yarn test
 ```

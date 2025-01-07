@@ -28,8 +28,6 @@ services:
       context: resources
       dockerfile: Dockerfile
     container_name: web
-    volumes:
-      - ./resources:/myapp
     ports:
       - "3000:3000"
     depends_on:
