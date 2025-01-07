@@ -3,6 +3,8 @@ import { Form, Input, Button, Card, notification } from 'antd';
 import { UserSignupRequestTypes } from '../../types/SignupType';
 import { userSignupRequest } from '../../slices/signupSlice';
 import { useIDispatch, useISelector } from '../../hooks';
+import { NavigateFunction, useNavigate } from 'react-router';
+import { getProfileRequest } from '../../slices/profileSlice';
 
 export const Signup: React.FC = () => {
   const [form] = Form.useForm();
@@ -14,13 +16,27 @@ export const Signup: React.FC = () => {
 
   const { pending, user, error } = useISelector((state) => state.signup)
   const [api, contextHolder] = notification.useNotification();
+  const navigate: NavigateFunction = useNavigate();
+
+  const handleUserRedirect = (userId: string) => {
+    dispatch(getProfileRequest({ userId }));
+    navigate(`/user/${userId}/profile/`);
+  }
 
   useEffect(() => {
     if (!pending) {
         if (user) {
-            const { message } = user;
-            api.success({ message });
-        } else if (error) api.error({ message: error });
+            const { message, id } = user;
+            api.success({
+                message,
+                description: 'Redirecting to your profile ...',
+                duration: 1,
+                onClose: () => {
+                    handleUserRedirect(id);
+                }
+            });
+        }
+        else if (error) api.error({ message: error });
     }
   })
 
